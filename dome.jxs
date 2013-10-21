@@ -1,0 +1,14 @@
+<jittershader name="dome">
+<param name="vLevel" type="int" default="0" />
+<param name="vZFar" type="float" default="10.0" />
+<param name="vFOV" type="float" default="180.0" />
+<language name="glsl" version="3.2">
+    <bind param="tex0" program="fp" />
+    <bind param="vLevel" program="gp" />
+    <bind param="vZFar" program="gp" />
+    <bind param="vFOV" program="gp" />
+    <program name="vp" type="vertex" source="dome.vert" />
+    <program name="gp" type="geometry" source="dome.geom" />
+    <program name="fp" type="fragment" source="dome.frag" />
+</language>
+</jittershader>
