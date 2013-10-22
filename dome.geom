@@ -1,7 +1,10 @@
-#version 330 compatibility
+#version 330
 #extension GL_ARB_gpu_shader5 : enable
 
 #define PI 3.14159265358979
+#define BASELINE 0.065
+#define RADIUS 2
+#define STEREO true
 
 // Uniforms and inputs
 uniform int vPass;
@@ -23,7 +26,6 @@ in VertexData
 
 out VertexData
 {
-    flat int eyeID;
     vec2 texCoord;
     vec3 normal;
 } vertexOut;
@@ -35,6 +37,7 @@ void subdiv_l2(in vec4 v[3], in vec2 s[3]);
 void subdiv_l3(in vec4 v[3], in vec2 s[3]);
 void subdiv_l4(in vec4 v[3], in vec2 s[3]);
 vec4 toSphere(in vec4 v);
+vec4 toStereo(in vec4 v);
 
 // Utility functions
 float clampUnit(in float v);
@@ -63,12 +66,9 @@ vec2 middleOf(in vec2 l, in vec2 m)
 /***************/
 void emitVertex(in vec4 v, in vec2 s)
 {
-    if (gl_InvocationID == 0)
-        gl_Position = v;
-    else
-        gl_Position = v + vec4(0.1, 0.1, 0.1, 0.0);
+    gl_Position = v;
     vertexOut.texCoord = s;
-    vertexOut.eyeID = gl_InvocationID;
+    gl_PrimitiveID = gl_InvocationID;
     EmitVertex();
 }
 
@@ -91,6 +91,14 @@ vec4 toSphere(in vec4 v)
         phi = first;
     else
         phi = 2.0*PI - first;
+        
+    if (STEREO)
+    {
+        vec4 s = toStereo(vec4(phi, theta, r, 1.0));
+        phi = s.x;
+        theta = s.y;
+        r = s.z;
+    }
 
     o.x = theta * cos(phi);
     o.y = theta * sin(phi);
@@ -99,6 +107,23 @@ vec4 toSphere(in vec4 v)
     o.z = r / vZFar;
 
     return o;
+}
+
+/***************/
+vec4 toStereo(in vec4 v)
+{
+    float b = BASELINE;
+    float r = RADIUS;
+
+    float d = length(v.xy);
+    float theta;
+    if (gl_InvocationID == 0)
+        theta = atan(b * (d - r) / (d * r));
+    else
+        theta = atan(-b * (d - r) / (d * r));
+
+    vec4 s = vec4(v.x + theta, v.yzw);
+    return s;
 }
 
 /***************/

@@ -99,17 +99,17 @@ void main(void)
 
   //the following computes new vertex position such that projection w.r.t. origin gives correct pixel on screen
 
-  /////////////////true stereo position
-  ///////////////vec3 eye=rot_Y(vec3(Bs,0,0),camangle);
-  ///////////////vec3 vertex_noelevat=vec3(vertex.x,0,vertex.z);
-  ///////////////vec3 screen_noelevat=intersect_line_and_sphere(R,eye,vertex_noelevat);
-  /////////////////compute true stereo screen projection
-  ///////////////vec3 vertex_line=vertex.xyz-eye;
-  ///////////////vec3 vertex_noelevat_line=vertex_noelevat-eye;
-  ///////////////vec3 screen_noelevat_line=screen_noelevat-eye;
-  ///////////////vec3 screen_pos=eye+vertex_line/vnorm(vertex_noelevat_line)*vnorm(screen_noelevat_line);
-  /////////////////compute new vertex position so that central projection gives screen_pos, the depth is kept the same
-  ///////////////vec3 v_stereo=screen_pos/vnorm(screen_pos)*vnorm(vertex.xyz);
+  //true stereo position
+  vec3 eye=rot_Y(vec3(Bs,0,0),camangle);
+  vec3 vertex_noelevat=vec3(vertex.x,0,vertex.z);
+  vec3 screen_noelevat=intersect_line_and_sphere(R,eye,vertex_noelevat);
+  //compute true stereo screen projection
+  vec3 vertex_line=vertex.xyz-eye;
+  vec3 vertex_noelevat_line=vertex_noelevat-eye;
+  vec3 screen_noelevat_line=screen_noelevat-eye;
+  vec3 screen_pos=eye+vertex_line/vnorm(vertex_noelevat_line)*vnorm(screen_noelevat_line);
+  //compute new vertex position so that central projection gives screen_pos, the depth is kept the same
+  vec3 v_stereo=screen_pos/vnorm(screen_pos)*vnorm(vertex.xyz);
 
   //rotational vertex position
   //compute intersection of circle having radius R and centered at the origin with the line (B,0)->(0,depth)
