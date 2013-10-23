@@ -115,7 +115,7 @@ vec4 toStereo(in vec4 v)
     float b = BASELINE;
     float r = RADIUS;
 
-    float d = length(v.xy);
+    float d = v.z * (1 - cos(v.y));
     float theta;
     if (gl_InvocationID == 0)
         theta = atan(b * (d - r) / (d * r));
@@ -144,19 +144,9 @@ void main()
     else
     {
         vec4[3] vertices;
-        for (int i = 0; i < 3; ++i)
-            vertices[i] = vec4(0.0);
-
-        //vertices[0] = gl_in[0].gl_Position;
-        //vertices[1] = gl_in[1].gl_Position;
-        //vertices[2] = gl_in[2].gl_Position;
-
         vertices[0] = toSphere(vertexIn[0].vertex);
         vertices[1] = toSphere(vertexIn[1].vertex);
         vertices[2] = toSphere(vertexIn[2].vertex);
-        //vertices[2].x = 0.0;
-        //vertices[2].y = 0.0;
-        //vertices[2].z = -0.5;
 
         emitVertex(vertices[0], vertexIn[0].texCoord);
         emitVertex(vertices[1], vertexIn[1].texCoord);
