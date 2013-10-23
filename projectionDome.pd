@@ -10,14 +10,14 @@
 #X obj 94 178 thisdir;
 #X msg 114 385 cow;
 #X msg 110 155 createNode cow ModelNode;
-#X obj 360 349 vradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144
+#X obj 360 319 vradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144
 -1 -1 0;
 #X obj 78 222 thisdir;
 #X obj 47 134 t b b b b b;
-#X obj 360 476 s \$0-to-SPIN;
-#X obj 382 333 vsl 15 90 180 360 0 0 empty empty empty 0 -9 0 10 -262144
+#X obj 360 488 s \$0-to-SPIN;
+#X obj 382 303 vsl 15 90 180 360 0 0 empty empty empty 0 -9 0 10 -262144
 -1 -1 2500 1;
-#X floatatom 382 316 5 0 0 0 - - -;
+#X floatatom 382 285 5 0 0 0 - - -;
 #X obj 456 116 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #X obj 456 135 thisdir;
@@ -32,9 +32,16 @@
 #X msg 63 281 /sh setShader \$1/dome.jxs;
 #X msg 47 307 /cow setStateSet sh;
 #X msg 203 327 /sh debug;
-#X msg 360 428 /sh setUniform_int vLevel \$1;
-#X msg 382 450 /sh setUniform_float vFOV \$1;
+#X msg 360 398 /sh setUniform_int vLevel \$1;
+#X msg 382 420 /sh setUniform_float vFOV \$1;
 #X msg 94 199 /cow setModelFromFile \$1/monkey.obj;
+#X obj 421 303 vsl 15 90 0.065 0.5 0 0 empty empty empty 0 -9 0 10
+-262144 -1 -1 0 1;
+#X floatatom 421 285 5 0 0 0 - - -;
+#X msg 421 443 /sh setUniform_float vBaseline \$1;
+#X obj 446 365 vradio 15 1 0 2 empty empty empty 0 -8 0 10 -262144
+-1 -1 0;
+#X msg 446 464 /sh setUniform_int vStereo \$1;
 #X connect 2 0 5 0;
 #X connect 3 0 26 0;
 #X connect 5 0 1 0;
@@ -66,3 +73,8 @@
 #X connect 29 0 13 0;
 #X connect 30 0 13 0;
 #X connect 31 0 0 0;
+#X connect 32 0 33 0;
+#X connect 32 0 34 0;
+#X connect 34 0 13 0;
+#X connect 35 0 36 0;
+#X connect 36 0 13 0;

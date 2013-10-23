@@ -4,8 +4,6 @@
 
 #define PI 3.14159265358979
 #define INVERT_DOME false
-#define BASELINE 0.065
-#define RADIUS 2
 #define STEREO true
 
 // Uniforms and inputs
@@ -13,6 +11,8 @@ uniform int vPass;
 uniform int vLevel;
 uniform float vZFar;
 uniform float vFOV;
+uniform int vStereo;
+uniform float vBaseline;
 
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 128) out;
@@ -95,7 +95,7 @@ vec4 toSphere(in vec4 v)
     else
         phi = 2.0*PI - first;
         
-    if (STEREO)
+    if (vStereo == 1)
     {
         vec4 s = toStereo(vec4(phi, theta, r, 1.0));
         phi = s.x;
@@ -121,8 +121,8 @@ vec4 toSphere(in vec4 v)
 /***************/
 vec4 toStereo(in vec4 v)
 {
-    float b = BASELINE;
-    float r = RADIUS;
+    float b = vBaseline;
+    float r = b * 30.0;
 
     float d = v.z; // * (1 - cos(v.y));
     float theta;
@@ -138,6 +138,9 @@ vec4 toStereo(in vec4 v)
 /***************/
 void main()
 {
+    if (vStereo != 1 && gl_InvocationID != 0)
+        return;
+
     vec4 vertices[3];
     for (int i = 0; i < 3; ++i)
         if (INVERT_DOME)

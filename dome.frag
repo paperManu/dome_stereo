@@ -3,6 +3,8 @@
 
 uniform sampler2D tex0;
 
+uniform int vStereo;
+
 in VertexData
 {
     vec4 vertex;
@@ -18,6 +20,14 @@ layout(depth_greater) out float gl_FragDepth;
 /**************/
 void main()
 {
+    if (vStereo == 0)
+    {
+        both = vec4(vertexIn.normal, 1.0);
+        leftEye = vec4(vertexIn.normal, 1.0);
+        rightEye = vec4(vertexIn.normal, 1.0);
+        return;
+    }
+
     if (gl_PrimitiveID == 0)
     {
         both = vec4(vertexIn.normal, 1.0);
