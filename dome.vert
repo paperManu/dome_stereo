@@ -11,7 +11,6 @@ out VertexData
 void main()
 {
     vertexOut.vertex = (gl_ModelViewMatrix * gl_Vertex).xzyw;
-    gl_Position = vertexOut.vertex;
     vertexOut.texCoord = vec2(gl_TextureMatrix[0] * gl_MultiTexCoord0);
-    vertexOut.normal = vec3(0.0, 0.0, 1.0);
+    vertexOut.normal = gl_NormalMatrix * gl_Normal; //vec3(0.0, 0.0, 1.0);
 }
