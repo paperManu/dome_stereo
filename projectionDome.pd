@@ -1,80 +1,78 @@
 #N canvas 1923 55 702 514 10;
 #X obj 82 344 s \$0-to-SPIN;
-#X obj 35 428 subwidget-PAT \$0;
-#X obj 34 384 loadbang;
 #X obj 62 262 thisdir;
 #X obj 19 7 widget-spinConnectLite \$0;
-#X msg 34 405 plane;
 #X obj 47 112 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X obj 94 178 thisdir;
-#X msg 114 385 cow;
 #X msg 110 155 createNode cow ModelNode;
-#X obj 360 319 vradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144
+#X obj 343 143 vradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144
 -1 -1 0;
 #X obj 78 222 thisdir;
 #X obj 47 134 t b b b b b;
-#X obj 360 488 s \$0-to-SPIN;
-#X obj 382 303 vsl 15 90 180 360 0 0 empty empty empty 0 -9 0 10 -262144
--1 -1 2500 1;
-#X floatatom 382 285 5 0 0 0 - - -;
-#X obj 456 116 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
-#X obj 456 135 thisdir;
-#X msg 456 157 \$1/ppu;
-#X obj 456 179 pack s;
-#X msg 456 201 setParam shader \$1;
-#X obj 513 157 loadbang;
-#X obj 513 179 hostname -s;
-#X obj 456 223 OSCprepend;
-#X obj 456 245 s \$0-to-SPIN;
+#X obj 343 341 s \$0-to-SPIN;
+#X obj 365 127 vsl 15 90 180 360 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X floatatom 365 109 5 0 0 0 - - -;
+#X obj 42 358 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 42 377 thisdir;
+#X msg 42 399 \$1/ppu;
+#X obj 42 421 pack s;
+#X msg 42 443 setParam shader \$1;
+#X obj 99 399 loadbang;
+#X obj 99 421 hostname -s;
+#X obj 42 465 OSCprepend;
+#X obj 42 487 s \$0-to-SPIN;
 #X msg 78 243 createStateSet sh Shader;
 #X msg 63 281 /sh setShader \$1/dome.jxs;
 #X msg 47 307 /cow setStateSet sh;
 #X msg 203 327 /sh debug;
-#X msg 360 398 /sh setUniform_int vLevel \$1;
-#X msg 382 420 /sh setUniform_float vFOV \$1;
+#X msg 343 222 /sh setUniform_int vLevel \$1;
+#X msg 365 244 /sh setUniform_float vFOV \$1;
 #X msg 94 199 /cow setModelFromFile \$1/monkey.obj;
-#X obj 421 303 vsl 15 90 0.065 0.5 0 0 empty empty empty 0 -9 0 10
+#X obj 404 127 vsl 15 90 0.065 0.5 0 0 empty empty empty 0 -9 0 10
 -262144 -1 -1 0 1;
-#X floatatom 421 285 5 0 0 0 - - -;
-#X msg 421 443 /sh setUniform_float vBaseline \$1;
-#X obj 446 365 vradio 15 1 0 2 empty empty empty 0 -8 0 10 -262144
+#X floatatom 404 109 5 0 0 0 - - -;
+#X msg 404 267 /sh setUniform_float vBaseline \$1;
+#X obj 429 189 vradio 15 1 0 2 empty empty empty 0 -8 0 10 -262144
+-1 -1 1;
+#X msg 429 288 /sh setUniform_int vStereo \$1;
+#X obj 453 190 vradio 15 1 0 2 empty empty empty 0 -8 0 10 -262144
 -1 -1 0;
-#X msg 446 464 /sh setUniform_int vStereo \$1;
-#X connect 2 0 5 0;
-#X connect 3 0 26 0;
-#X connect 5 0 1 0;
-#X connect 6 0 12 0;
-#X connect 7 0 31 0;
-#X connect 8 0 1 0;
-#X connect 9 0 0 0;
-#X connect 10 0 29 0;
-#X connect 11 0 25 0;
-#X connect 12 0 27 0;
-#X connect 12 1 3 0;
-#X connect 12 2 11 0;
-#X connect 12 3 7 0;
-#X connect 12 4 9 0;
+#X msg 453 311 /sh setUniform_int vDisplayPattern \$1;
+#X connect 1 0 22 0;
+#X connect 3 0 8 0;
+#X connect 4 0 27 0;
+#X connect 5 0 0 0;
+#X connect 6 0 25 0;
+#X connect 7 0 21 0;
+#X connect 8 0 23 0;
+#X connect 8 1 1 0;
+#X connect 8 2 7 0;
+#X connect 8 3 4 0;
+#X connect 8 4 5 0;
+#X connect 10 0 11 0;
+#X connect 10 0 26 0;
+#X connect 12 0 13 0;
+#X connect 13 0 14 0;
 #X connect 14 0 15 0;
-#X connect 14 0 30 0;
-#X connect 16 0 17 0;
+#X connect 15 0 16 0;
+#X connect 16 0 19 0;
 #X connect 17 0 18 0;
-#X connect 18 0 19 0;
+#X connect 18 0 19 1;
 #X connect 19 0 20 0;
-#X connect 20 0 23 0;
-#X connect 21 0 22 0;
-#X connect 22 0 23 1;
-#X connect 23 0 24 0;
-#X connect 25 0 0 0;
-#X connect 26 0 0 0;
+#X connect 21 0 0 0;
+#X connect 22 0 0 0;
+#X connect 23 0 0 0;
+#X connect 24 0 0 0;
+#X connect 25 0 9 0;
+#X connect 26 0 9 0;
 #X connect 27 0 0 0;
-#X connect 28 0 0 0;
-#X connect 29 0 13 0;
-#X connect 30 0 13 0;
-#X connect 31 0 0 0;
-#X connect 32 0 33 0;
-#X connect 32 0 34 0;
-#X connect 34 0 13 0;
-#X connect 35 0 36 0;
-#X connect 36 0 13 0;
+#X connect 28 0 29 0;
+#X connect 28 0 30 0;
+#X connect 30 0 9 0;
+#X connect 31 0 32 0;
+#X connect 32 0 9 0;
+#X connect 33 0 34 0;
+#X connect 34 0 9 0;
