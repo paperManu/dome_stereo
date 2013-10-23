@@ -2,6 +2,7 @@
 
 #define INV_PATTERN_WIDTH 3.0
 #define DISPLAY_PATTERN false
+#define PATTERN_FOV 180.0
 
 uniform sampler2D vColorBuffer_0;
 uniform sampler2D vColorBuffer_1;
@@ -20,7 +21,7 @@ vec4 drawPattern()
 {
     vec4 c = vec4(0.0);
     float dist = length (texCoord - vec2(0.5, 0.5));
-    dist *= 180.0 * INV_PATTERN_WIDTH;
+    dist *= PATTERN_FOV * INV_PATTERN_WIDTH;
     if (int(dist) % int(10.0 * INV_PATTERN_WIDTH) < 1)
         c = vec4(1.0);
 

@@ -6,14 +6,14 @@
 -1;
 #X obj 94 178 thisdir;
 #X msg 110 155 createNode cow ModelNode;
-#X obj 343 143 vradio 15 1 0 5 empty empty empty 0 -8 0 10 -262144
+#X obj 343 143 vradio 15 1 0 5 empty empty Subdiv 0 -8 0 10 -262144
 -1 -1 0;
 #X obj 78 222 thisdir;
 #X obj 47 134 t b b b b b;
-#X obj 343 341 s \$0-to-SPIN;
-#X obj 365 127 vsl 15 90 180 360 0 0 empty empty empty 0 -9 0 10 -262144
+#X obj 343 331 s \$0-to-SPIN;
+#X obj 385 127 vsl 15 90 180 360 0 0 empty empty empty 0 -9 0 10 -262144
 -1 -1 0 1;
-#X floatatom 365 109 5 0 0 0 - - -;
+#X floatatom 385 109 5 0 0 2 FOV - -;
 #X obj 42 358 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X obj 42 377 thisdir;
@@ -29,18 +29,19 @@
 #X msg 47 307 /cow setStateSet sh;
 #X msg 203 327 /sh debug;
 #X msg 343 222 /sh setUniform_int vLevel \$1;
-#X msg 365 244 /sh setUniform_float vFOV \$1;
+#X msg 385 244 /sh setUniform_float vFOV \$1;
 #X msg 94 199 /cow setModelFromFile \$1/monkey.obj;
-#X obj 404 127 vsl 15 90 0.065 0.5 0 0 empty empty empty 0 -9 0 10
+#X obj 424 127 vsl 15 90 0.065 0.5 0 0 empty empty empty 0 -9 0 10
 -262144 -1 -1 0 1;
-#X floatatom 404 109 5 0 0 0 - - -;
-#X msg 404 267 /sh setUniform_float vBaseline \$1;
-#X obj 429 189 vradio 15 1 0 2 empty empty empty 0 -8 0 10 -262144
+#X floatatom 424 109 5 0 0 2 Baseline - -;
+#X msg 424 267 /sh setUniform_float vBaseline \$1;
+#X obj 449 189 vradio 15 1 0 2 empty empty empty 0 -8 0 10 -262144
 -1 -1 1;
-#X msg 429 288 /sh setUniform_int vStereo \$1;
-#X obj 453 190 vradio 15 1 0 2 empty empty empty 0 -8 0 10 -262144
--1 -1 0;
-#X msg 453 311 /sh setUniform_int vDisplayPattern \$1;
+#X msg 449 288 /sh setUniform_int vStereo \$1;
+#X obj 473 127 vsl 15 90 10 10000 1 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 6900 1;
+#X floatatom 473 109 5 0 0 2 ZFar - -;
+#X msg 473 308 /sh setUniform_float vZFar \$1;
 #X connect 1 0 22 0;
 #X connect 3 0 8 0;
 #X connect 4 0 27 0;
@@ -75,4 +76,5 @@
 #X connect 31 0 32 0;
 #X connect 32 0 9 0;
 #X connect 33 0 34 0;
-#X connect 34 0 9 0;
+#X connect 33 0 35 0;
+#X connect 35 0 9 0;
