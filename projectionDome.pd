@@ -1,58 +1,107 @@
-#N canvas 1215 79 702 607 10;
-#X obj 82 344 s \$0-to-SPIN;
-#X obj 62 262 thisdir;
-#X obj 19 7 widget-spinConnectLite \$0;
-#X obj 47 112 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+#N canvas 2011 159 1510 607 10;
+#X obj 74 311 s \$0-to-SPIN;
+#X obj 54 229 thisdir;
+#X obj 11 -26 widget-spinConnectLite \$0;
+#X obj 39 79 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X obj 94 178 thisdir;
-#X msg 110 155 createNode cow ModelNode;
-#X obj 343 143 vradio 15 1 0 5 empty empty Subdiv 0 -8 0 10 -262144
+#X obj 86 145 thisdir;
+#X msg 102 122 createNode cow ModelNode;
+#X obj 335 110 vradio 15 1 0 5 empty empty Subdiv 0 -8 0 10 -262144
 -1 -1 1;
-#X obj 78 222 thisdir;
-#X obj 47 134 t b b b b b;
-#X obj 343 331 s \$0-to-SPIN;
-#X obj 385 127 vsl 15 90 180 360 0 0 empty empty empty 0 -9 0 10 -262144
+#X obj 70 189 thisdir;
+#X obj 39 101 t b b b b b;
+#X obj 335 298 s \$0-to-SPIN;
+#X obj 377 94 vsl 15 90 180 360 0 0 empty empty empty 0 -9 0 10 -262144
 -1 -1 0 1;
-#X floatatom 385 109 5 0 0 2 FOV - -;
-#X obj 42 358 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+#X floatatom 377 76 5 0 0 2 FOV - -;
+#X obj 34 325 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X obj 42 377 thisdir;
-#X msg 42 399 \$1/ppu;
-#X obj 42 421 pack s;
-#X msg 42 443 setParam shader \$1;
-#X obj 99 399 loadbang;
-#X obj 99 421 hostname -s;
-#X obj 42 465 OSCprepend;
-#X obj 42 487 s \$0-to-SPIN;
-#X msg 78 243 createStateSet sh Shader;
-#X msg 63 281 /sh setShader \$1/dome.jxs;
-#X msg 47 307 /cow setStateSet sh;
-#X msg 203 327 /sh debug;
-#X msg 343 222 /sh setUniform_int vLevel \$1;
-#X msg 385 244 /sh setUniform_float vFOV \$1;
-#X msg 94 199 /cow setModelFromFile \$1/monkey.obj;
-#X obj 424 127 vsl 15 90 0.065 0.5 0 0 empty empty empty 0 -9 0 10
--262144 -1 -1 0 1;
-#X floatatom 424 109 5 0 0 2 Baseline - -;
-#X msg 424 267 /sh setUniform_float vBaseline \$1;
-#X obj 449 189 vradio 15 1 0 2 empty empty empty 0 -8 0 10 -262144
+#X obj 34 344 thisdir;
+#X msg 34 366 \$1/ppu;
+#X obj 34 388 pack s;
+#X msg 34 410 setParam shader \$1;
+#X obj 91 366 loadbang;
+#X obj 91 388 hostname -s;
+#X obj 34 432 OSCprepend;
+#X obj 34 454 s \$0-to-SPIN;
+#X msg 70 210 createStateSet sh Shader;
+#X msg 55 248 /sh setShader \$1/dome.jxs;
+#X msg 39 274 /cow setStateSet sh;
+#X msg 195 294 /sh debug;
+#X msg 335 189 /sh setUniform_int vLevel \$1;
+#X msg 377 211 /sh setUniform_float vFOV \$1;
+#X msg 86 166 /cow setModelFromFile \$1/monkey.obj;
+#X obj 416 94 vsl 15 90 0.065 0.5 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X floatatom 416 76 5 0 0 2 Baseline - -;
+#X msg 416 234 /sh setUniform_float vBaseline \$1;
+#X obj 441 156 vradio 15 1 0 2 empty empty empty 0 -8 0 10 -262144
 -1 -1 1;
-#X msg 449 288 /sh setUniform_int vStereo \$1;
-#X obj 473 127 vsl 15 90 10 10000 1 0 empty empty empty 0 -9 0 10 -262144
+#X msg 441 255 /sh setUniform_int vStereo \$1;
+#X obj 465 94 vsl 15 90 10 10000 1 0 empty empty empty 0 -9 0 10 -262144
 -1 -1 8900 1;
-#X floatatom 473 109 5 0 0 2 ZFar - -;
-#X msg 473 308 /sh setUniform_float vZFar \$1;
-#X msg 255 399 createNode light1 LightSource \, /light1 setDiffuse
-0.5 0.5 0.5 \, /light1 setTranslation 10 10 20;
-#X msg 255 434 createNode light2 LightSource \, /light2 setDiffuse
+#X floatatom 465 76 5 0 0 2 ZFar - -;
+#X msg 465 275 /sh setUniform_float vZFar \$1;
+#X msg 247 401 createNode light2 LightSource \, /light2 setDiffuse
 0.5 0.5 0.5 \, /light2 setTranslation -10 -10 20;
-#X msg 255 469 createNode light3 LightSource \, /light3 setDiffuse
-0.5 0.5 0.5 \, /light3 setTranslation 10 -10 20;
-#X msg 255 508 createNode light4 LightSource \, /light4 setDiffuse
+#X msg 247 475 createNode light4 LightSource \, /light4 setDiffuse
 0.5 0.5 0.5 \, /light4 setTranslation -10 10 20;
-#X obj 255 379 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X obj 247 346 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X obj 231 547 s \$0-to-SPIN;
+#X obj 223 514 s \$0-to-SPIN;
+#X msg 247 436 createNode light3 LightSource \, /light3 setDiffuse
+0.5 0.5 0.5 \, /light3 setTranslation 10 -10 20;
+#X msg 247 366 createNode light1 LightSource \, /light1 setDiffuse
+0.5 0.5 0.5 \, /light1 setTranslation 10 10 -20;
+#X obj 757 148 until;
+#X obj 757 172 f;
+#X obj 782 172 + 1;
+#X msg 798 148 0;
+#X obj 757 194 t b a;
+#X obj 757 261 until;
+#X obj 757 283 f;
+#X obj 784 283 + 1;
+#X msg 805 261 0;
+#X obj 757 306 pack f f;
+#X obj 757 238 t a b;
+#X obj 757 353 qlist;
+#X obj 914 140 r creation;
+#X msg 842 235 rewind;
+#X msg 843 197 clear;
+#X obj 914 187 unpack f f;
+#X obj 1004 187 random 100;
+#X obj 1004 209 / 100;
+#X obj 914 163 t a b b b b;
+#X obj 1077 186 random 100;
+#X obj 914 271 pack f f f f f f;
+#X obj 1077 207 / 10;
+#X obj 914 233 -;
+#X obj 738 125 t b b a b b a;
+#X obj 971 233 -;
+#X obj 767 452 print;
+#X msg 767 430 World loaded!;
+#X obj 914 209 * 4;
+#X obj 971 209 * 4;
+#X obj 1004 234 - 6;
+#X obj 862 142 * 2;
+#X msg 738 102 25;
+#X msg 757 216 25;
+#X obj 738 59 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 784 375 delay 500;
+#X msg 901 413 /ground_cube* setScale 4 4 4 \, /ground_cube* setColor
+1 1 1 1 \, /ground_cube* setCollisionMode 2 \, /ground_cube* setDynamic
+1 \, /ground_cube* setMass 0 \, /ground_cube* setFriction 1.5;
+#X obj 738 79 t b b b;
+#X obj 784 396 t b b b;
+#X msg 803 507 setReliableBroadcast 0;
+#X msg 757 329 add 10 creation \$1 \$2;
+#X obj 759 58 r _world;
+#X msg 914 297 createNode ground_cube_\$1_\$2 CollisionShape \, /ground_cube_\$1_\$2
+setTranslation \$1 \$2 \$3 \, /ground_cube_\$1_\$2 setStateSet sh;
+#X obj 914 482 s \$0-to-SPIN;
+#X msg 846 53 setReliableBroadcast 1;
+#X obj 846 70 s \$0-to-SPIN;
 #X connect 1 0 22 0;
 #X connect 3 0 8 0;
 #X connect 4 0 27 0;
@@ -89,11 +138,69 @@
 #X connect 33 0 34 0;
 #X connect 33 0 35 0;
 #X connect 35 0 9 0;
-#X connect 36 0 41 0;
-#X connect 37 0 41 0;
+#X connect 36 0 39 0;
+#X connect 37 0 39 0;
 #X connect 38 0 41 0;
-#X connect 39 0 41 0;
-#X connect 40 0 36 0;
-#X connect 40 0 37 0;
-#X connect 40 0 38 0;
+#X connect 38 0 36 0;
+#X connect 38 0 40 0;
+#X connect 38 0 37 0;
 #X connect 40 0 39 0;
+#X connect 41 0 39 0;
+#X connect 42 0 43 0;
+#X connect 43 0 44 0;
+#X connect 43 0 46 0;
+#X connect 44 0 43 1;
+#X connect 45 0 43 1;
+#X connect 46 0 74 0;
+#X connect 46 1 51 1;
+#X connect 47 0 48 0;
+#X connect 48 0 49 0;
+#X connect 48 0 51 0;
+#X connect 49 0 48 1;
+#X connect 50 0 48 1;
+#X connect 51 0 81 0;
+#X connect 52 0 47 0;
+#X connect 52 1 50 0;
+#X connect 53 1 76 0;
+#X connect 54 0 60 0;
+#X connect 55 0 53 0;
+#X connect 56 0 53 0;
+#X connect 57 0 69 0;
+#X connect 57 1 70 0;
+#X connect 58 0 59 0;
+#X connect 59 0 71 0;
+#X connect 60 0 57 0;
+#X connect 60 1 58 0;
+#X connect 60 2 61 0;
+#X connect 61 0 63 0;
+#X connect 62 0 83 0;
+#X connect 63 0 62 3;
+#X connect 64 0 62 0;
+#X connect 65 0 53 0;
+#X connect 65 1 55 0;
+#X connect 65 2 42 0;
+#X connect 65 3 45 0;
+#X connect 65 4 56 0;
+#X connect 65 5 72 0;
+#X connect 66 0 62 1;
+#X connect 68 0 67 0;
+#X connect 69 0 64 0;
+#X connect 70 0 66 0;
+#X connect 71 0 62 2;
+#X connect 72 0 66 1;
+#X connect 72 0 64 1;
+#X connect 73 0 65 0;
+#X connect 74 0 52 0;
+#X connect 75 0 78 0;
+#X connect 76 0 79 0;
+#X connect 77 0 84 0;
+#X connect 78 0 73 0;
+#X connect 78 2 85 0;
+#X connect 79 0 68 0;
+#X connect 79 1 80 0;
+#X connect 79 2 77 0;
+#X connect 80 0 84 0;
+#X connect 81 0 53 0;
+#X connect 82 0 78 0;
+#X connect 83 0 84 0;
+#X connect 85 0 86 0;

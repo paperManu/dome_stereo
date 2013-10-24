@@ -31,14 +31,14 @@ void main()
 
     if (gl_PrimitiveID == 0)
     {
-        both = vec4(vertexIn.normal, 1.0);
+        both = vertexIn.diffuse;
         //leftEye = vec4(vertexIn.normal, 1.0) * vec4(1.0, 0.0, 0.0, 1.0);
         leftEye = vertexIn.diffuse * vec4(1.0, 0.0, 0.0, 1.0);
         rightEye = vec4(0.0);
     }
     else
     {
-        both = vec4(vertexIn.normal, 1.0);
+        both = vertexIn.diffuse;
         leftEye = vec4(0.0);
         //rightEye = vec4(vertexIn.normal, 1.0) * vec4(0.0, 1.0, 1.0, 1.0);
         rightEye = vertexIn.diffuse * vec4(0.0, 1.0, 1.0, 1.0);
