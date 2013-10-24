@@ -32,18 +32,28 @@ out VertexData
     vec3 normal;
 } vertexOut;
 
+// Types
+struct Point
+{
+    vec4 vertex;
+    vec2 texCoord;
+    vec3 normal;
+};
+
 // Declarations
 void main();
-void subdiv_l1(in vec4 v[3], in vec2 s[3]);
-void subdiv_l2(in vec4 v[3], in vec2 s[3]);
-void subdiv_l3(in vec4 v[3], in vec2 s[3]);
-void subdiv_l4(in vec4 v[3], in vec2 s[3]);
-vec4 toSphere(in vec4 v);
-vec4 toStereo(in vec4 v);
+void subdiv_l1(in Point p[3]);
+void subdiv_l2(in Point p[3]);
+void subdiv_l3(in Point p[3]);
+void subdiv_l4(in Point p[3]);
+void toSphere(inout Point p);
+void toStereo(inout vec4 v);
 
 // Utility functions
 float clampUnit(in float v);
+Point middleOf(in Point p, in Point q);
 vec4 middleOf(in vec4 v, in vec4 w);
+vec3 middleOf(in vec3 v, in vec3 w);
 vec2 middleOf(in vec2 l, in vec2 m);
 void emitVertex(in vec4 v, in vec2 s);
 
@@ -54,7 +64,23 @@ float clampUnit(in float v)
 }
 
 /***************/
+Point middleOf(in Point p, in Point q)
+{
+    Point o;
+    o.vertex = (p.vertex + q.vertex) * 0.5;
+    o.texCoord = (p.texCoord + q.texCoord) * 0.5;
+    o.normal = (p.normal + q.normal) * 0.5;
+    return o;
+}
+
+/***************/
 vec4 middleOf(in vec4 v, in vec4 w)
+{
+    return (v + w) * 0.5;
+}
+
+/***************/
+vec3 middleOf(in vec3 v, in vec3 w)
 {
     return (v + w) * 0.5;
 }
@@ -66,18 +92,20 @@ vec2 middleOf(in vec2 l, in vec2 m)
 }
 
 /***************/
-void emitVertex(in vec4 v, in vec2 s, in vec3 n)
+void emitVertex(in Point p)
 {
-    gl_Position = v;
-    vertexOut.texCoord = s;
-    vertexOut.normal = n;
+    gl_Position = p.vertex;
+    vertexOut.texCoord = p.texCoord;
+    vertexOut.normal = p.normal;
     gl_PrimitiveID = gl_InvocationID;
     EmitVertex();
 }
 
 /***************/
-vec4 toSphere(in vec4 v)
+void toSphere(inout Point p)
 {
+    vec4 v = p.vertex;
+
     float val;
     vec4 o = vec4(1.0);
 
@@ -97,7 +125,8 @@ vec4 toSphere(in vec4 v)
         
     if (vStereo == 1)
     {
-        vec4 s = toStereo(vec4(phi, theta, r, 1.0));
+        vec4 s = vec4(phi, theta, r, 1.0);
+        toStereo(s);
         phi = s.x;
         theta = s.y;
         r = s.z;
@@ -115,11 +144,11 @@ vec4 toSphere(in vec4 v)
     else
         o.x = o.x / 2.0 + 0.5;
 
-    return o;
+    p.vertex = o;
 }
 
 /***************/
-vec4 toStereo(in vec4 v)
+void toStereo(inout vec4 v)
 {
     float b = vBaseline;
     float r = b * 30.0;
@@ -131,8 +160,7 @@ vec4 toStereo(in vec4 v)
     else
         theta = atan(-b * (d - r) / (d * r));
 
-    vec4 s = vec4(v.x + theta, v.yzw);
-    return s;
+    v = vec4(v.x + theta, v.yzw);
 }
 
 /***************/
@@ -141,237 +169,189 @@ void main()
     if (vStereo != 1 && gl_InvocationID != 0)
         return;
 
+    Point points[3];
     vec4 vertices[3];
     for (int i = 0; i < 3; ++i)
+    {
         if (INVERT_DOME)
-            vertices[i] = vec4(vertexIn[i].vertex.x, vertexIn[i].vertex.y, -vertexIn[i].vertex.z, vertexIn[i].vertex.w);
+            points[i].vertex = vec4(vertexIn[i].vertex.x, vertexIn[i].vertex.y, -vertexIn[i].vertex.z, vertexIn[i].vertex.w);
         else
-            vertices[i] = vertexIn[i].vertex;
+            points[i].vertex = vertexIn[i].vertex;
+
+        points[i].texCoord = vertexIn[i].texCoord;
+        points[i].normal = vertexIn[i].normal;
+    }
+
 
     if (vLevel > 0)
     {
-
-
-        vec2 s[3];
-        for (int i = 0; i < 3; ++i)
-            s[i] = vertexIn[i].texCoord;
-
-        subdiv_l1(vertices, s);
+        subdiv_l1(points);
     }
     else
     {
-        vertices[0] = toSphere(vertices[0]);
-        vertices[1] = toSphere(vertices[1]);
-        vertices[2] = toSphere(vertices[2]);
+        toSphere(points[0]);
+        toSphere(points[1]);
+        toSphere(points[2]);
 
-        emitVertex(vertices[0], vertexIn[0].texCoord, vertexIn[0].normal);
-        emitVertex(vertices[1], vertexIn[1].texCoord, vertexIn[1].normal);
-        emitVertex(vertices[2], vertexIn[2].texCoord, vertexIn[2].normal);
+        emitVertex(points[0]);
+        emitVertex(points[1]);
+        emitVertex(points[2]);
         EndPrimitive();
 
     }
 }
 
 /*************/
-void subdiv_l1(in vec4 v[3], in vec2 s[3])
+void subdiv_l1(in Point p[3])
 {
-    vec4 w[3];
-    w[0] = middleOf(v[0], v[1]);
-    w[1] = middleOf(v[1], v[2]);
-    w[2] = middleOf(v[2], v[0]);
-    vec2 t[3];
-    t[0] = middleOf(s[0], s[1]);
-    t[1] = middleOf(s[1], s[2]);
-    t[2] = middleOf(s[2], s[0]);
+    Point q[3];
+    for (int i = 0; i < 3; ++i)
+        q[i] = middleOf(p[i], p[(i+1)%3]);
 
     if (vLevel > 1)
     {
         for (int i = 0; i < 3; ++i)
         {
-            vec4 u[3];
-            u[0] = v[i];
-            u[1] = w[i];
-            u[2] = w[(i+2)%3];
+            Point r[3];
+            r[0] = p[i];
+            r[1] = q[i];
+            r[2] = q[(i+2)%3];
 
-            vec2 r[3];
-            r[0] = s[i];
-            r[1] = t[i];
-            r[2] = t[(i+2)%3];
-
-            subdiv_l2(u, r);
+            subdiv_l2(r);
         }
 
-        subdiv_l2(w, t);
+        subdiv_l2(q);
     }
     else
     {
-        vec4 inputVert[3], newVert[3];
-        inputVert[0] = toSphere(v[0]);
-        inputVert[1] = toSphere(v[1]);
-        inputVert[2] = toSphere(v[2]);
-        newVert[0] = toSphere(w[0]);
-        newVert[1] = toSphere(w[1]);
-        newVert[2] = toSphere(w[2]);
+        for (int i = 0; i < 3; ++i)
+        {
+            toSphere(p[i]);
+            toSphere(q[i]);
+        }
 
-        emitVertex(inputVert[0], s[0], vec3(1.0));
-        emitVertex(newVert[2], t[2], vec3(1.0));
-        emitVertex(newVert[0], t[0], vec3(1.0));
-        emitVertex(newVert[1], t[1], vec3(1.0));
-        emitVertex(inputVert[1], s[1], vec3(1.0));
+        emitVertex(p[0]);
+        emitVertex(q[2]);
+        emitVertex(q[0]);
+        emitVertex(q[1]);
+        emitVertex(p[1]);
         EndPrimitive();
 
-        emitVertex(inputVert[2], s[2], vec3(1.0));
-        emitVertex(newVert[2], t[2], vec3(1.0));
-        emitVertex(newVert[1], t[1], vec3(1.0));
+        emitVertex(p[2]);
+        emitVertex(q[2]);
+        emitVertex(q[1]);
         EndPrimitive();
     }
 }
 
 /*************/
-void subdiv_l2(in vec4 v[3], in vec2 s[3])
+void subdiv_l2(in Point p[3])
 {
-    vec4 w[3];
-    w[0] = middleOf(v[0], v[1]);
-    w[1] = middleOf(v[1], v[2]);
-    w[2] = middleOf(v[2], v[0]);
-    vec2 t[3];
-    t[0] = middleOf(s[0], s[1]);
-    t[1] = middleOf(s[1], s[2]);
-    t[2] = middleOf(s[2], s[0]);
+    Point q[3];
+    for (int i = 0; i < 3; ++i)
+        q[i] = middleOf(p[i], p[(i+1)%3]);
 
     if (vLevel > 2)
     {
-        // To the third level
         for (int i = 0; i < 3; ++i)
         {
-            vec4 u[3];
-            u[0] = v[i];
-            u[1] = w[i];
-            u[2] = w[(i+2)%3];
+            Point r[3];
+            r[0] = p[i];
+            r[1] = q[i];
+            r[2] = q[(i+2)%3];
 
-            vec2 r[3];
-            r[0] = s[i];
-            r[1] = t[i];
-            r[2] = t[(i+2)%3];
-
-            subdiv_l3(u, r);
+            subdiv_l3(r);
         }
 
-        subdiv_l3(w, t);
+        subdiv_l3(q);
     }
     else
     {
-        // Projection of all points
-        vec4 inputVert[3], newVert[3];
-        inputVert[0] = toSphere(v[0]);
-        inputVert[1] = toSphere(v[1]);
-        inputVert[2] = toSphere(v[2]);
-        newVert[0] = toSphere(w[0]);
-        newVert[1] = toSphere(w[1]);
-        newVert[2] = toSphere(w[2]);
+        for (int i = 0; i < 3; ++i)
+        {
+            toSphere(p[i]);
+            toSphere(q[i]);
+        }
 
-        emitVertex(inputVert[0], s[0], vec3(1.0));
-        emitVertex(newVert[2], t[2], vec3(1.0));
-        emitVertex(newVert[0], t[0], vec3(1.0));
-        emitVertex(newVert[1], t[1], vec3(1.0));
-        emitVertex(inputVert[1], s[1], vec3(1.0));
+        emitVertex(p[0]);
+        emitVertex(q[2]);
+        emitVertex(q[0]);
+        emitVertex(q[1]);
+        emitVertex(p[1]);
         EndPrimitive();
 
-        emitVertex(inputVert[2], s[2], vec3(1.0));
-        emitVertex(newVert[2], t[2], vec3(1.0));
-        emitVertex(newVert[1], t[1], vec3(1.0));
+        emitVertex(p[2]);
+        emitVertex(q[2]);
+        emitVertex(q[1]);
         EndPrimitive();
     }
 }
 
 /*************/
-void subdiv_l3(in vec4 v[3], in vec2 s[3])
+void subdiv_l3(in Point p[3])
 {
-    vec4 w[3];
-    w[0] = middleOf(v[0], v[1]);
-    w[1] = middleOf(v[1], v[2]);
-    w[2] = middleOf(v[2], v[0]);
-    vec2 t[3];
-    t[0] = middleOf(s[0], s[1]);
-    t[1] = middleOf(s[1], s[2]);
-    t[2] = middleOf(s[2], s[0]);
+    Point q[3];
+    for (int i = 0; i < 3; ++i)
+        q[i] = middleOf(p[i], p[(i+1)%3]);
 
     if (vLevel > 3)
     {
-        // To the third level
         for (int i = 0; i < 3; ++i)
         {
-            vec4 u[3];
-            u[0] = v[i];
-            u[1] = w[i];
-            u[2] = w[(i+2)%3];
+            Point r[3];
+            r[0] = p[i];
+            r[1] = q[i];
+            r[2] = q[(i+2)%3];
 
-            vec2 r[3];
-            r[0] = s[i];
-            r[1] = t[i];
-            r[2] = t[(i+2)%3];
-
-            subdiv_l4(u, r);
+            subdiv_l4(r);
         }
 
-        subdiv_l4(w, t);
+        subdiv_l4(q);
     }
     else
     {
-        // Projection of all points
-        vec4 inputVert[3], newVert[3];
-        inputVert[0] = toSphere(v[0]);
-        inputVert[1] = toSphere(v[1]);
-        inputVert[2] = toSphere(v[2]);
-        newVert[0] = toSphere(w[0]);
-        newVert[1] = toSphere(w[1]);
-        newVert[2] = toSphere(w[2]);
+        for (int i = 0; i < 3; ++i)
+        {
+            toSphere(p[i]);
+            toSphere(q[i]);
+        }
 
-        emitVertex(inputVert[0], s[0], vec3(1.0));
-        emitVertex(newVert[2], t[2], vec3(1.0));
-        emitVertex(newVert[0], t[0], vec3(1.0));
-        emitVertex(newVert[1], t[1], vec3(1.0));
-        emitVertex(inputVert[1], s[1], vec3(1.0));
+        emitVertex(p[0]);
+        emitVertex(q[2]);
+        emitVertex(q[0]);
+        emitVertex(q[1]);
+        emitVertex(p[1]);
         EndPrimitive();
 
-        emitVertex(inputVert[2], s[2], vec3(1.0));
-        emitVertex(newVert[2], t[2], vec3(1.0));
-        emitVertex(newVert[1], t[1], vec3(1.0));
+        emitVertex(p[2]);
+        emitVertex(q[2]);
+        emitVertex(q[1]);
         EndPrimitive();
     }
 }
 
 /*************/
-void subdiv_l4(in vec4 v[3], in vec2 s[3])
+void subdiv_l4(in Point p[3])
 {
-    vec4 w[3];
-    w[0] = middleOf(v[0], v[1]);
-    w[1] = middleOf(v[1], v[2]);
-    w[2] = middleOf(v[2], v[0]);
-    vec2 t[3];
-    t[0] = middleOf(s[0], s[1]);
-    t[1] = middleOf(s[1], s[2]);
-    t[2] = middleOf(s[2], s[0]);
+    Point q[3];
+    for (int i = 0; i < 3; ++i)
+        q[i] = middleOf(p[i], p[(i+1)%3]);
 
+    for (int i = 0; i < 3; ++i)
+    {
+        toSphere(p[i]);
+        toSphere(q[i]);
+    }
 
-    // Projection of all points
-    vec4 inputVert[3], newVert[3];
-    inputVert[0] = toSphere(v[0]);
-    inputVert[1] = toSphere(v[1]);
-    inputVert[2] = toSphere(v[2]);
-    newVert[0] = toSphere(w[0]);
-    newVert[1] = toSphere(w[1]);
-    newVert[2] = toSphere(w[2]);
-
-    emitVertex(inputVert[0], s[0], vec3(1.0));
-    emitVertex(newVert[2], t[2], vec3(1.0));
-    emitVertex(newVert[0], t[0], vec3(1.0));
-    emitVertex(newVert[1], t[1], vec3(1.0));
-    emitVertex(inputVert[1], s[1], vec3(1.0));
+    emitVertex(p[0]);
+    emitVertex(q[2]);
+    emitVertex(q[0]);
+    emitVertex(q[1]);
+    emitVertex(p[1]);
     EndPrimitive();
 
-    emitVertex(inputVert[2], s[2], vec3(1.0));
-    emitVertex(newVert[2], t[2], vec3(1.0));
-    emitVertex(newVert[1], t[1], vec3(1.0));
+    emitVertex(p[2]);
+    emitVertex(q[2]);
+    emitVertex(q[1]);
     EndPrimitive();
 }
