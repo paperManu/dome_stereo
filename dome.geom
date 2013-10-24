@@ -188,7 +188,6 @@ void main()
         points[i].diffuse = vertexIn[i].diffuse;
     }
 
-
     if (vLevel > 0)
     {
         subdiv_l1(points);
@@ -203,7 +202,6 @@ void main()
         emitVertex(points[1]);
         emitVertex(points[2]);
         EndPrimitive();
-
     }
 }
 

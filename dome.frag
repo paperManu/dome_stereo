@@ -23,10 +23,8 @@ void main()
 {
     if (vStereo == 0)
     {
-        both = vec4(vertexIn.normal, 1.0);
-        //leftEye = vec4(vertexIn.normal, 1.0);
+        both = vertexIn.diffuse;
         leftEye = vertexIn.diffuse;
-        //rightEye = vec4(vertexIn.normal, 1.0);
         rightEye = vertexIn.diffuse;
         return;
     }
@@ -36,7 +34,6 @@ void main()
         both = vec4(vertexIn.normal, 1.0);
         //leftEye = vec4(vertexIn.normal, 1.0) * vec4(1.0, 0.0, 0.0, 1.0);
         leftEye = vertexIn.diffuse * vec4(1.0, 0.0, 0.0, 1.0);
-        //leftEye = vec4(1.0, 0.0, 0.0, 1.0);
         rightEye = vec4(0.0);
     }
     else
@@ -45,6 +42,5 @@ void main()
         leftEye = vec4(0.0);
         //rightEye = vec4(vertexIn.normal, 1.0) * vec4(0.0, 1.0, 1.0, 1.0);
         rightEye = vertexIn.diffuse * vec4(0.0, 1.0, 1.0, 1.0);
-        //rightEye = vec4(0.0, 1.0, 1.0, 1.0);
     }
 }
