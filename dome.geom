@@ -7,7 +7,6 @@
 #define STEREO true
 
 // Uniforms and inputs
-uniform int vPass;
 uniform int vLevel;
 uniform float vZFar;
 uniform float vFOV;
@@ -53,18 +52,11 @@ void toSphere(inout Point p);
 void toStereo(inout vec4 v);
 
 // Utility functions
-float clampUnit(in float v);
 Point middleOf(in Point p, in Point q);
 vec4 middleOf(in vec4 v, in vec4 w);
 vec3 middleOf(in vec3 v, in vec3 w);
 vec2 middleOf(in vec2 l, in vec2 m);
 void emitVertex(in vec4 v, in vec2 s);
-
-/***************/
-float clampUnit(in float v)
-{
-    return max(-1.0, min(1.0, v));
-}
 
 /***************/
 Point middleOf(in Point p, in Point q)
@@ -115,14 +107,14 @@ void toSphere(inout Point p)
     vec4 o = vec4(1.0);
 
     float r = sqrt(pow(v.x, 2.0) + pow(v.y, 2.0) + pow(v.z, 2.0));
-    val = clampUnit(v.z / r);
+    val = clamp(v.z / r, -1.0, 1.0);
     float theta = acos(val);
 
     float phi;
     val = v.x / (r * sin(theta));
-    float first = acos(clampUnit(val));
+    float first = acos(clamp(val, -1.0, 1.0));
     val = v.y / (r * sin(theta));
-    float second = asin(clampUnit(val));
+    float second = asin(clamp(val, -1.0, 1.0));
     if (second >= 0.0)
         phi = first;
     else
