@@ -15,7 +15,7 @@ uniform int vStereo;
 uniform float vBaseline;
 
 layout(triangles) in;
-layout(triangle_strip, max_vertices = 128) out;
+layout(triangle_strip, max_vertices = 32) out;
 layout(invocations = 2) in;
 
 // Input and output types
@@ -24,12 +24,14 @@ in VertexData
     vec4 vertex;
     vec2 texCoord;
     vec3 normal;
+    vec4 diffuse;
 } vertexIn[];
 
 out VertexData
 {
     vec2 texCoord;
     vec3 normal;
+    vec4 diffuse;
 } vertexOut;
 
 // Types
@@ -38,6 +40,7 @@ struct Point
     vec4 vertex;
     vec2 texCoord;
     vec3 normal;
+    vec4 diffuse;
 };
 
 // Declarations
@@ -70,6 +73,7 @@ Point middleOf(in Point p, in Point q)
     o.vertex = (p.vertex + q.vertex) * 0.5;
     o.texCoord = (p.texCoord + q.texCoord) * 0.5;
     o.normal = (p.normal + q.normal) * 0.5;
+    o.diffuse = (p.diffuse + q.diffuse) * 0.5;
     return o;
 }
 
@@ -97,6 +101,7 @@ void emitVertex(in Point p)
     gl_Position = p.vertex;
     vertexOut.texCoord = p.texCoord;
     vertexOut.normal = p.normal;
+    vertexOut.diffuse = p.diffuse;
     gl_PrimitiveID = gl_InvocationID;
     EmitVertex();
 }
@@ -180,6 +185,7 @@ void main()
 
         points[i].texCoord = vertexIn[i].texCoord;
         points[i].normal = vertexIn[i].normal;
+        points[i].diffuse = vertexIn[i].diffuse;
     }
 
 

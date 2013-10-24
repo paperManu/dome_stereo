@@ -10,6 +10,7 @@ in VertexData
     vec4 vertex;
     vec2 texCoord;
     vec3 normal;
+    vec4 diffuse;
 } vertexIn;
 
 layout(location = 0) out vec4 both;
@@ -23,15 +24,18 @@ void main()
     if (vStereo == 0)
     {
         both = vec4(vertexIn.normal, 1.0);
-        leftEye = vec4(vertexIn.normal, 1.0);
-        rightEye = vec4(vertexIn.normal, 1.0);
+        //leftEye = vec4(vertexIn.normal, 1.0);
+        leftEye = vertexIn.diffuse;
+        //rightEye = vec4(vertexIn.normal, 1.0);
+        rightEye = vertexIn.diffuse;
         return;
     }
 
     if (gl_PrimitiveID == 0)
     {
         both = vec4(vertexIn.normal, 1.0);
-        leftEye = vec4(vertexIn.normal, 1.0) * vec4(1.0, 0.0, 0.0, 1.0);
+        //leftEye = vec4(vertexIn.normal, 1.0) * vec4(1.0, 0.0, 0.0, 1.0);
+        leftEye = vertexIn.diffuse * vec4(1.0, 0.0, 0.0, 1.0);
         //leftEye = vec4(1.0, 0.0, 0.0, 1.0);
         rightEye = vec4(0.0);
     }
@@ -39,7 +43,8 @@ void main()
     {
         both = vec4(vertexIn.normal, 1.0);
         leftEye = vec4(0.0);
-        rightEye = vec4(vertexIn.normal, 1.0) * vec4(0.0, 1.0, 1.0, 1.0);
+        //rightEye = vec4(vertexIn.normal, 1.0) * vec4(0.0, 1.0, 1.0, 1.0);
+        rightEye = vertexIn.diffuse * vec4(0.0, 1.0, 1.0, 1.0);
         //rightEye = vec4(0.0, 1.0, 1.0, 1.0);
     }
 }
