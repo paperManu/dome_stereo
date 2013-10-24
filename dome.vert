@@ -16,6 +16,14 @@ void main()
     vertexOut.normal = gl_NormalMatrix * gl_Normal; //vec3(0.0, 0.0, 1.0);
 
     vec3 n = vertexOut.normal;
-    vec3 ldir = normalize(vertexOut.vertex.xyz - vec3(0.0, 0.0, 50.0));
-    vertexOut.diffuse = gl_FrontMaterial.diffuse * max(-dot(n, ldir), 0.0);
+    vec4 diffuse = vec4(0.0);
+
+    for (int i = 0; i < 8; ++i)
+    {
+        vec3 lpos = gl_LightSource[i].position.xyz;
+        vec3 ldir = normalize(vertexOut.vertex.xyz - lpos);
+        diffuse += gl_FrontMaterial.diffuse * gl_LightSource[i].diffuse * max(-dot(n, ldir), 0.0);
+    }
+
+    vertexOut.diffuse = diffuse;
 }

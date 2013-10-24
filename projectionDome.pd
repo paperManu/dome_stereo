@@ -1,4 +1,4 @@
-#N canvas 1923 55 702 514 10;
+#N canvas 1215 79 702 607 10;
 #X obj 82 344 s \$0-to-SPIN;
 #X obj 62 262 thisdir;
 #X obj 19 7 widget-spinConnectLite \$0;
@@ -7,7 +7,7 @@
 #X obj 94 178 thisdir;
 #X msg 110 155 createNode cow ModelNode;
 #X obj 343 143 vradio 15 1 0 5 empty empty Subdiv 0 -8 0 10 -262144
--1 -1 0;
+-1 -1 1;
 #X obj 78 222 thisdir;
 #X obj 47 134 t b b b b b;
 #X obj 343 331 s \$0-to-SPIN;
@@ -39,9 +39,20 @@
 -1 -1 1;
 #X msg 449 288 /sh setUniform_int vStereo \$1;
 #X obj 473 127 vsl 15 90 10 10000 1 0 empty empty empty 0 -9 0 10 -262144
--1 -1 6900 1;
+-1 -1 8900 1;
 #X floatatom 473 109 5 0 0 2 ZFar - -;
 #X msg 473 308 /sh setUniform_float vZFar \$1;
+#X msg 255 399 createNode light1 LightSource \, /light1 setDiffuse
+0.5 0.5 0.5 \, /light1 setTranslation 10 10 20;
+#X msg 255 434 createNode light2 LightSource \, /light2 setDiffuse
+0.5 0.5 0.5 \, /light2 setTranslation -10 -10 20;
+#X msg 255 469 createNode light3 LightSource \, /light3 setDiffuse
+0.5 0.5 0.5 \, /light3 setTranslation 10 -10 20;
+#X msg 255 508 createNode light4 LightSource \, /light4 setDiffuse
+0.5 0.5 0.5 \, /light4 setTranslation -10 10 20;
+#X obj 255 379 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 231 547 s \$0-to-SPIN;
 #X connect 1 0 22 0;
 #X connect 3 0 8 0;
 #X connect 4 0 27 0;
@@ -78,3 +89,11 @@
 #X connect 33 0 34 0;
 #X connect 33 0 35 0;
 #X connect 35 0 9 0;
+#X connect 36 0 41 0;
+#X connect 37 0 41 0;
+#X connect 38 0 41 0;
+#X connect 39 0 41 0;
+#X connect 40 0 36 0;
+#X connect 40 0 37 0;
+#X connect 40 0 38 0;
+#X connect 40 0 39 0;
