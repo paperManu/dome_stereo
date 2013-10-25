@@ -33,8 +33,8 @@ void main()
 {
     fragColor = vec4(0.0, 0.0, 0.0, 1.0);
     //fragColor += texture2D(vColorBuffer_0, texCoord);
-    fragColor += texture2D(vColorBuffer_1, vec2(texCoord.x / 2.0, texCoord.y));
-    fragColor += texture2D(vColorBuffer_2, vec2(texCoord.x / 2.0 + 0.5, texCoord.y));
+    fragColor += texture2D(vColorBuffer_1, vec2(texCoord.x / 2.0, texCoord.y)) * vec4(1.0, 0.0, 0.0, 1.0);
+    fragColor += texture2D(vColorBuffer_2, vec2(texCoord.x / 2.0 + 0.5, texCoord.y)) * vec4(0.0, 1.0, 1.0, 1.0);
 
     if (DISPLAY_PATTERN)
         fragColor += drawPattern();

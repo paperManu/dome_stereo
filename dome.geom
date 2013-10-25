@@ -51,6 +51,7 @@ void subdiv_l3(in Point p[3]);
 void subdiv_l4(in Point p[3]);
 void toSphere(inout Point p);
 void toStereo(inout vec4 v);
+bool cull(in Point p[3]);
 
 // Utility functions
 Point middleOf(in Point p, in Point q);
@@ -91,6 +92,10 @@ vec2 middleOf(in vec2 l, in vec2 m)
 /***************/
 void emitVertex(in Point p)
 {
+    if (vStereo == 1)
+        if ((gl_InvocationID == 0 && p.vertex.x > 0.0) || (gl_InvocationID == 1 && p.vertex.x < 0.0))
+            return;
+
     gl_Position = p.vertex;
     vertexOut.texCoord = p.texCoord;
     vertexOut.normal = p.normal;
@@ -137,9 +142,9 @@ void toSphere(inout Point p)
     o.z = r / vZFar;
 
     // Small work around to the depth testing which hides duplicate objects...
-    if (gl_InvocationID == 0)
+    if (gl_InvocationID == 0 && vStereo == 1)
         o.x = o.x / 2.0 - 0.5;
-    else
+    else if (vStereo == 1)
         o.x = o.x / 2.0 + 0.5;
 
     p.vertex = o;
@@ -162,6 +167,23 @@ void toStereo(inout vec4 v)
 }
 
 /***************/
+bool cull(in Point p[3])
+{
+    for (int i = 0; i < 3; ++i)
+        toSphere(p[i]);
+
+    float limit = (vStereo == 1) ? 1.0 : 2.0;
+
+    bool visible = true;
+    for (int i = 0; i < 3; ++i)
+    {
+        if (abs(p[i].vertex.x - p[(i+1)%3].vertex.x) > limit || abs(p[i].vertex.y - p[(i+1)%3].vertex.y) > limit)
+            visible = false;
+    }
+    return !visible;
+}
+
+/***************/
 void main()
 {
     if (vStereo != 1 && gl_InvocationID != 0)
@@ -180,6 +202,9 @@ void main()
         points[i].normal = vertexIn[i].normal;
         points[i].diffuse = vertexIn[i].diffuse;
     }
+
+    if (cull(points))
+        return;
 
     if (vLevel > 0)
     {
