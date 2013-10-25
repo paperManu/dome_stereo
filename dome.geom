@@ -12,6 +12,7 @@ uniform float vZFar;
 uniform float vFOV;
 uniform int vStereo;
 uniform float vBaseline;
+uniform float vRadius;
 
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 32) out;
@@ -148,7 +149,7 @@ void toSphere(inout Point p)
 void toStereo(inout vec4 v)
 {
     float b = vBaseline;
-    float r = b * 30.0;
+    float r = vRadius;
 
     float d = v.z; // * (1 - cos(v.y));
     float theta;

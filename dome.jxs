@@ -3,6 +3,7 @@
 <param name="vZFar" type="float" default="10.0" />
 <param name="vFOV" type="float" default="180.0" />
 <param name="vBaseline" type="float" default="0.065" />
+<param name="vRadius" type="float" default="2.0" />
 <param name="vStereo" type="int" default="1" />
 <language name="glsl" version="3.3">
     <bind param="tex0" program="fp" />
@@ -10,6 +11,7 @@
     <bind param="vZFar" program="gp" />
     <bind param="vFOV" program="gp" />
     <bind param="vBaseline" program="gp" />
+    <bind param="vRadius" program="gp" />
     <bind param="vStereo" program="gp" />
     <program name="vp" type="vertex" source="dome.vert" />
     <program name="gp" type="geometry" source="dome.geom" />
