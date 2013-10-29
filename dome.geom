@@ -92,6 +92,7 @@ vec2 middleOf(in vec2 l, in vec2 m)
 /***************/
 void emitVertex(in Point p)
 {
+    // This prevents both views to draw in the other one...
     if (vStereo == 1)
         if ((gl_InvocationID == 0 && p.vertex.x > 0.0) || (gl_InvocationID == 1 && p.vertex.x < 0.0))
             return;
@@ -159,9 +160,9 @@ void toStereo(inout vec4 v)
     float d = v.z; // * (1 - cos(v.y));
     float theta;
     if (gl_InvocationID == 0)
-        theta = atan(b * (d - r) / (d * r));
+        theta = atan(b * (d - r) / (d * r)) * (1 - cos(v.y));
     else
-        theta = atan(-b * (d - r) / (d * r));
+        theta = atan(-b * (d - r) / (d * r)) * (1 - cos(v.y));
 
     v = vec4(v.x + theta, v.yzw);
 }

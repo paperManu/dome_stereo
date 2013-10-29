@@ -24,6 +24,7 @@ void main()
     if (vStereo == 0)
     {
         both = vertexIn.diffuse;
+        //both = texture2D(tex0, vertexIn.texCoord);
         leftEye = vertexIn.diffuse;
         rightEye = vertexIn.diffuse;
         return;

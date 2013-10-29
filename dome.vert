@@ -22,7 +22,7 @@ void main()
     {
         vec3 lpos = gl_LightSource[i].position.xyz;
         vec3 ldir = normalize(vertexOut.vertex.xyz - lpos);
-        diffuse += gl_FrontMaterial.diffuse * gl_LightSource[i].diffuse * max(-dot(n, ldir), 0.0);
+        diffuse += gl_FrontMaterial.diffuse * gl_LightSource[i].diffuse * max(-dot(gl_Normal, ldir), 0.0);
     }
 
     vertexOut.diffuse = diffuse;
